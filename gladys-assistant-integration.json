@@ -1,0 +1,262 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "PS5 Remote Play",
+  "description": {
+    "en": "Switch your PlayStation 5 on or to rest mode and see the game being played.",
+    "fr": "Allumez ou mettez en veille votre PlayStation 5 et voyez le jeu en cours."
+  },
+  "version": "0.0.0",
+  "docker_image": "ghcr.io/luckys7evin/gladys-ps5-mqtt:0.0.0",
+  "gladys_version": ">=5.1.0",
+  "cover_image": "https://raw.githubusercontent.com/LuckyS7evin/gladys-ps5-mqtt/main/cover.png",
+  "categories": ["multimedia"],
+  "network_discovery": [{ "type": "udp-active-broadcast", "ports": [9302, 987] }],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": { "en": "Getting started", "fr": "Pour commencer" },
+      "description": {
+        "en": "On the console, enable Remote Play, and in the power saving settings keep it connected to the Internet and allow turning it on from the network. Then add the console from the Discovery tab and pair it with the two actions below.",
+        "fr": "Sur la console, activez la Lecture à distance et, dans les paramètres d'économie d'énergie, restez connecté à Internet et autorisez l'allumage depuis le réseau. Ajoutez ensuite la console depuis l'onglet Découverte et associez-la avec les deux actions ci-dessous."
+      },
+      "links": [
+        {
+          "url": "https://www.playstation.com/support/connectivity/ps-remote-play-ps5/",
+          "label": { "en": "Remote Play setup", "fr": "Configurer la Lecture à distance" }
+        }
+      ]
+    },
+    {
+      "key": "static_ips",
+      "type": "string",
+      "label": { "en": "Console IP addresses", "fr": "Adresses IP des consoles" },
+      "description": {
+        "en": "Optional, comma-separated: consoles the network scan cannot find (another VLAN, broadcasts filtered).",
+        "fr": "Facultatif, séparées par des virgules : les consoles que la recherche réseau ne trouve pas (autre VLAN, broadcasts filtrés)."
+      },
+      "placeholder": { "en": "e.g. 192.168.1.42", "fr": "ex. 192.168.1.42" },
+      "required": false
+    },
+    {
+      "key": "include_ps4",
+      "type": "boolean",
+      "label": { "en": "Include PlayStation 4 consoles", "fr": "Inclure les PlayStation 4" },
+      "description": {
+        "en": "PS4 consoles support power on, rest mode and the running game.",
+        "fr": "Les PS4 prennent en charge l'allumage, le mode repos et le jeu en cours."
+      },
+      "required": false,
+      "default": false
+    },
+    {
+      "key": "login_passcode",
+      "type": "secret",
+      "label": { "en": "Profile passcode", "fr": "Code d'accès du profil" },
+      "description": {
+        "en": "Only if the PlayStation profile asks for a passcode at login: digits, or key names separated by spaces.",
+        "fr": "Seulement si le profil PlayStation demande un code à la connexion : des chiffres, ou des noms de touches séparés par des espaces."
+      },
+      "required": false
+    },
+    {
+      "key": "psn",
+      "type": "section",
+      "label": { "en": "Game being played (optional)", "fr": "Jeu en cours (facultatif)" },
+      "description": {
+        "en": "The console does not say what it runs: the game comes from the presence of your PlayStation Network account. Sign in on playstation.com, then open the NPSSO link below and copy the 64-character value of \"npsso\".",
+        "fr": "La console n'indique pas ce qu'elle exécute : le jeu vient de la présence de votre compte PlayStation Network. Connectez-vous sur playstation.com, puis ouvrez le lien NPSSO ci-dessous et copiez la valeur de 64 caractères de « npsso »."
+      },
+      "links": [
+        {
+          "url": "https://www.playstation.com/",
+          "label": {
+            "en": "1. Sign in on playstation.com",
+            "fr": "1. Se connecter sur playstation.com"
+          }
+        },
+        {
+          "url": "https://ca.account.sony.com/api/v1/ssocookie",
+          "label": { "en": "2. Get the NPSSO token", "fr": "2. Obtenir le jeton NPSSO" }
+        }
+      ]
+    },
+    {
+      "key": "npsso",
+      "type": "secret",
+      "label": { "en": "NPSSO token", "fr": "Jeton NPSSO" },
+      "description": {
+        "en": "Only used to sign in: the tokens it yields are kept and refreshed by the integration.",
+        "fr": "Sert uniquement à la connexion : les jetons obtenus sont conservés et renouvelés par l'intégration."
+      },
+      "required": false
+    },
+    {
+      "key": "psn_preferred_console",
+      "type": "select",
+      "source": "devices",
+      "label": { "en": "Preferred console", "fr": "Console préférée" },
+      "description": {
+        "en": "When several consoles are on, the game is shown on this one.",
+        "fr": "Quand plusieurs consoles sont allumées, le jeu est affiché sur celle-ci."
+      },
+      "required": false
+    },
+    {
+      "key": "psn_poll_interval",
+      "type": "number",
+      "label": {
+        "en": "Game refresh interval (s)",
+        "fr": "Intervalle de rafraîchissement du jeu (s)"
+      },
+      "description": {
+        "en": "How often the PlayStation Network presence is read (10 s minimum, rate-limited by Sony).",
+        "fr": "Fréquence de lecture de la présence PlayStation Network (10 s minimum, limitée par Sony)."
+      },
+      "required": false,
+      "default": 30,
+      "min": 10,
+      "max": 600
+    }
+  ],
+  "actions": [
+    {
+      "key": "psn_login_link",
+      "label": {
+        "en": "1. Get the PlayStation sign-in link",
+        "fr": "1. Obtenir le lien de connexion PlayStation"
+      },
+      "description": {
+        "en": "Open the link, sign in with the account used on the console, and copy the address of the blank page you land on.",
+        "fr": "Ouvrez le lien, connectez-vous avec le compte utilisé sur la console, et copiez l'adresse de la page blanche affichée."
+      },
+      "timeout_seconds": 10
+    },
+    {
+      "key": "pair_console",
+      "label": { "en": "2. Pair a console", "fr": "2. Associer une console" },
+      "description": {
+        "en": "The console must be on. Get the PIN in Settings > System > Remote Play > Link Device.",
+        "fr": "La console doit être allumée. Le code PIN est dans Paramètres > Système > Lecture à distance > Associer un appareil."
+      },
+      "timeout_seconds": 60,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Console", "fr": "Console" },
+          "required": true
+        },
+        {
+          "key": "redirect_url",
+          "type": "secret",
+          "label": { "en": "Address of the blank page", "fr": "Adresse de la page blanche" },
+          "placeholder": {
+            "en": "https://remoteplay.dl.playstation.net/remoteplay/redirect?code=...",
+            "fr": "https://remoteplay.dl.playstation.net/remoteplay/redirect?code=..."
+          },
+          "required": true
+        },
+        {
+          "key": "pin",
+          "type": "string",
+          "label": { "en": "PIN shown by the console", "fr": "Code PIN affiché par la console" },
+          "placeholder": { "en": "8 digits", "fr": "8 chiffres" },
+          "required": true
+        }
+      ]
+    },
+    {
+      "key": "test_psn",
+      "label": {
+        "en": "Test the PlayStation Network account",
+        "fr": "Tester le compte PlayStation Network"
+      },
+      "timeout_seconds": 30
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "game_started",
+      "label": { "en": "Game started", "fr": "Jeu lancé" },
+      "description": {
+        "en": "A game started on a console (PlayStation Network account required on PS5).",
+        "fr": "Un jeu a été lancé sur une console (compte PlayStation Network requis sur PS5)."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Console", "fr": "Console" }
+        },
+        {
+          "key": "title_id",
+          "type": "string",
+          "label": { "en": "Title ID (optional)", "fr": "Identifiant du titre (facultatif)" },
+          "placeholder": { "en": "e.g. PPSA01521_00", "fr": "ex. PPSA01521_00" }
+        }
+      ],
+      "variables": [
+        { "key": "title_name", "type": "string", "label": { "en": "Game", "fr": "Jeu" } },
+        {
+          "key": "title_id",
+          "type": "string",
+          "label": { "en": "Title ID", "fr": "Identifiant du titre" }
+        }
+      ]
+    },
+    {
+      "key": "game_stopped",
+      "label": { "en": "Game stopped", "fr": "Jeu arrêté" },
+      "description": {
+        "en": "A console stopped playing a game: game closed, console put in rest mode or switched off.",
+        "fr": "Une console a arrêté un jeu : jeu fermé, console mise en veille ou éteinte."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Console", "fr": "Console" }
+        },
+        {
+          "key": "title_id",
+          "type": "string",
+          "label": { "en": "Title ID (optional)", "fr": "Identifiant du titre (facultatif)" },
+          "placeholder": { "en": "e.g. PPSA01521_00", "fr": "ex. PPSA01521_00" }
+        }
+      ],
+      "variables": [
+        { "key": "title_name", "type": "string", "label": { "en": "Game", "fr": "Jeu" } },
+        {
+          "key": "title_id",
+          "type": "string",
+          "label": { "en": "Title ID", "fr": "Identifiant du titre" }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "now_playing",
+      "label": { "en": "PlayStation", "fr": "PlayStation" },
+      "description": {
+        "en": "Power, status and game of a console, with its cover and power buttons.",
+        "fr": "Alimentation, état et jeu d'une console, avec la jaquette et les boutons."
+      },
+      "icon": "monitor",
+      "settings": [
+        {
+          "key": "console",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Console", "fr": "Console" },
+          "required": true
+        }
+      ]
+    }
+  ]
+}
