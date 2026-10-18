@@ -6,8 +6,8 @@
     "en": "Switch your PlayStation 5 on or to rest mode and see the game being played.",
     "fr": "Allumez ou mettez en veille votre PlayStation 5 et voyez le jeu en cours."
   },
-  "version": "0.0.0",
-  "docker_image": "ghcr.io/luckys7evin/gladys-ps5-mqtt:0.0.0",
+  "version": "1.0.0",
+  "docker_image": "ghcr.io/luckys7evin/gladys-ps5-mqtt:1.0.0",
   "gladys_version": ">=5.1.0",
   "cover_image": "https://raw.githubusercontent.com/LuckyS7evin/gladys-ps5-mqtt/main/cover.png",
   "categories": ["multimedia"],

@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-18
+
 ### Added
 
 - PS5 Remote Play integration, a native port of the Home Assistant add-on
@@ -27,4 +29,5 @@ the notes of the version's GitHub Release.
 - "Game started" and "Game stopped" scene triggers (Gladys 5.1.0 or later).
 - "PlayStation" dashboard widget: power, status, game cover and power buttons.
 
-[Unreleased]: https://github.com/LuckyS7evin/gladys-ps5-mqtt/commits/main
+[Unreleased]: https://github.com/LuckyS7evin/gladys-ps5-mqtt/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/LuckyS7evin/gladys-ps5-mqtt/releases/tag/v1.0.0

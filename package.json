@@ -1,6 +1,6 @@
 {
   "name": "gladys-ps5-remote-play",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "PS5 Remote Play integration for Gladys Assistant: power on, rest mode and game being played, a port of ps5-mqtt.",
   "type": "module",
