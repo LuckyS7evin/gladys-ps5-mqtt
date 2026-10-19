@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-19
+
 ### Fixed
 
 - Gladys refused to create a console from the Discovery tab ("Status — minimum
@@ -35,5 +37,6 @@ the notes of the version's GitHub Release.
 - "Game started" and "Game stopped" scene triggers (Gladys 5.1.0 or later).
 - "PlayStation" dashboard widget: power, status, game cover and power buttons.
 
-[Unreleased]: https://github.com/LuckyS7evin/gladys-ps5-mqtt/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/LuckyS7evin/gladys-ps5-mqtt/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/LuckyS7evin/gladys-ps5-mqtt/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/LuckyS7evin/gladys-ps5-mqtt/releases/tag/v1.0.0
