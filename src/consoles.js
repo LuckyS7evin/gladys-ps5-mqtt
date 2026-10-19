@@ -99,6 +99,10 @@ export function buildDevice(gladys, info) {
         read_only: true,
         has_feedback: false,
         keep_history: false,
+        // Gladys stores min/max as NOT NULL for every feature, text included
+        // (422 on device creation otherwise); they bound nothing for a text.
+        min: 0,
+        max: 0,
       },
       {
         name: 'Game',
@@ -108,6 +112,10 @@ export function buildDevice(gladys, info) {
         read_only: true,
         has_feedback: false,
         keep_history: false,
+        // Gladys stores min/max as NOT NULL for every feature, text included
+        // (422 on device creation otherwise); they bound nothing for a text.
+        min: 0,
+        max: 0,
       },
     ],
   };

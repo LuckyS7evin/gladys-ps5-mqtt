@@ -10,6 +10,12 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Fixed
+
+- Gladys refused to create a console from the Discovery tab ("Status — minimum
+  value: required field not set"): the status and game features now declare
+  their bounds.
+
 ## [1.0.0] - 2026-10-18
 
 ### Added

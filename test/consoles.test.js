@@ -83,6 +83,17 @@ test('Gladys accepts the discovery payload of a console', async () => {
   assert.equal(device.params.find((p) => p.name === 'IP_ADDRESS').value, PS5_IP);
 });
 
+test('every feature declares min and max', () => {
+  // Gladys refuses to create a device whose features lack them (422,
+  // "t_device_feature.min cannot be null") — the fake Gladys of the SDK does
+  // not check it, so this test does.
+  const device = buildDevice(createFakeGladys(), parseSearchResponse(ps5Reply(), PS5_IP));
+  for (const feature of device.features) {
+    assert.equal(typeof feature.min, 'number', `${feature.name}: min`);
+    assert.equal(typeof feature.max, 'number', `${feature.name}: max`);
+  }
+});
+
 test('a scan publishes every console found', async (t) => {
   const { gladys, consoles } = await setup({
     t,
