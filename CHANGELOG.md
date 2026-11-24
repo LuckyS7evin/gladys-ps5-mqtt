@@ -10,6 +10,12 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Changed
+
+- Declared `transports: ["local", "cloud"]`: the consoles are driven on the
+  local network and the game comes from the PlayStation Network, so both
+  filters of the Gladys catalog now find the integration.
+
 ## [1.0.1] - 2026-10-19
 
 ### Fixed
