@@ -83,6 +83,10 @@ test('declaring catalog categories requires Gladys >= 4.86.0', () => {
   );
 });
 
+test('the manifest declares both transports: the LAN consoles and the PSN presence', () => {
+  assert.deepEqual(manifest.transports, ['local', 'cloud']);
+});
+
 test('declaring scene triggers, scene actions or widgets requires Gladys >= 5.1.0', () => {
   const declared = CAPABILITY_FIELDS.filter((field) => manifest[field] !== undefined);
   assert.ok(declared.length > 0, 'the integration declares scene triggers and a widget');
